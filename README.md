@@ -68,6 +68,12 @@ POST /api/token-auth/
   "password": "yourpassword"
 }
 ```
+```
+curl -X POST http://127.0.0.1:8000/api/token-auth/ \
+     -H "Content-Type: application/json" \
+     -d '{"username": "your_username", "password": "your_password"}'
+
+```
 
 Use the returned token in the `Authorization` header for all requests:
 ```
@@ -85,11 +91,22 @@ Authorization: Token your_token_here
   }
   ```
 
+  ```
+  curl -X POST http://127.0.0.1:8000/api/generate-summary/ -H "Authorization: Token your_token_here" -H "Content-Type: application/json" -d "{\"text\": \"The Eiffel Tower was built in 1889 and is one of the most iconic landmarks in the world.\"}"
+  ```
+
+
+
 - Response:
   ```json
   {
     "summary": "A quick brown fox leaps over a lazy dog."
   }
+  ```
+
+  ```
+  curl -X POST http://127.0.0.1:8000/api/generate-bullet-points/ -H "Authorization: Token your_token_here" -H "Content-Type: application/json" -d "{\"text\": \"Python is widely used in data science, machine learning, and web development.\"}"
+
   ```
 
 ### `POST /api/generate-bullet-points/`
