@@ -146,11 +146,6 @@ OPENAI_API_KEY=sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 DEBUG=True
 ```
 
-## 👨‍💻 Author
-
-Developed by Your Name  
-https://github.com/yourusername
-
 ## 📄 License
 
 MIT License
