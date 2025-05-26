@@ -1,0 +1,1 @@
+# AISquare_Technical_Assignement
