@@ -180,6 +180,29 @@ test_report_YYYYMMDD_HHMM.txt
 ```
 
 ---
+## 💻 CLI Demo Script: Wikipedia → LLM → Markdown
+
+The project includes a helper script: `demo_curl_runner.py`  
+It automates a full flow using the live API endpoints.
+
+### 🔧 What It Does:
+
+| Step | Action |
+|------|--------|
+| 1️⃣ | Prompts for a username and password |
+| 2️⃣ | Registers the user (or skips if already exists) |
+| 3️⃣ | Authenticates and fetches an API token |
+| 4️⃣ | Retrieves a random Wikipedia article |
+| 5️⃣ | Calls `/generate-summary/` and `/generate-bullet-points/` using `curl` |
+| 6️⃣ | Displays results in the terminal |
+| 7️⃣ | Saves a structured Markdown file: `summary_<topic>.md`
+
+### ▶️ How to Run It
+
+```bash
+python demo_curl_runner.py
+```
+---
 
 ## 📄 License
 
