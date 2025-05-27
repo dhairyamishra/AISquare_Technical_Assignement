@@ -7,6 +7,8 @@
 {% if user.is_authenticated %}
   <p>Logged in as <strong>{{ user.username }}</strong></p>
   <p><a href="{% url 'play-quiz' %}">▶️ Play a Quiz</a></p>
+  <p><a href="{% url 'summary-ui' %}">📝 Try Summary</a></p>
+  <p><a href="{% url 'bullets-ui' %}">📌 Try Bullet Points</a></p>
 
   <form action="{% url 'logout' %}" method="post" style="display: inline;">
     {% csrf_token %}

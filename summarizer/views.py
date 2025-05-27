@@ -11,6 +11,10 @@ from rest_framework.permissions import IsAuthenticated
 from .utils import client, MODEL_NAME
 import json
 from rest_framework.authtoken.models import Token
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render
+import requests
+from .utils import sanitize_text
 
 class RegisterUserView(APIView):
     permission_classes = [AllowAny]
@@ -133,3 +137,55 @@ class GenerateQuizView(APIView):
 
         except Exception as e:
             return Response({"error": str(e)}, status=500)
+        
+@login_required
+def summary_ui_view(request):
+    result = None
+    error = None
+
+    if request.method == "POST":
+        text = request.POST.get("text", "")
+        text = sanitize_text(text)
+        if not text.strip():
+            error = "Please enter text to summarize."
+        else:
+            token, _ = Token.objects.get_or_create(user=request.user)
+            response = requests.post("http://127.0.0.1:8000/api/generate-summary/",
+                                     headers={"Authorization": f"Token {token.key}"},
+                                     json={"text": text})
+            if response.status_code == 200:
+                result = response.json()["summary"]
+            else:
+                error = response.text
+
+    return render(request, "summarizer/summary_ui.html", {"result": result, "error": error})
+
+
+@login_required
+def bullet_ui_view(request):
+    result = None
+    error = None
+
+    if request.method == "POST":
+        text = request.POST.get("text", "")
+        text = sanitize_text(text)
+        if not text.strip():
+            error = "Please enter text for bullet extraction."
+        else:
+            token, _ = Token.objects.get_or_create(user=request.user)
+            response = requests.post("http://127.0.0.1:8000/api/generate-bullet-points/",
+                                     headers={"Authorization": f"Token {token.key}"},
+                                     json={"text": text})
+            if response.status_code == 200:
+                result = response.json()["bullet_points"]
+            else:
+                error = response.text
+
+    return render(request, "summarizer/bullet_ui.html", {"result": result, "error": error})
+
+
+
+
+
+
+

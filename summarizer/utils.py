@@ -42,3 +42,13 @@ def generate_bullet_points(text):
     raw_output = response.choices[0].message.content.strip()
     lines = raw_output.split("\n")
     return [line.strip("-• ").strip() for line in lines if line.strip()]
+
+import re
+
+def sanitize_text(text):
+    # Remove control characters and invisible Unicode
+    text = re.sub(r'[\x00-\x1F\x7F\u200B\u200C\u200D\u2060]', '', text)
+    # Normalize newlines and whitespace
+    text = re.sub(r'\s+', ' ', text).strip()
+    return text
+
