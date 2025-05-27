@@ -137,18 +137,21 @@ curl -X POST http://127.0.0.1:8000/api/generate-summary/ \
   -H "Authorization: Token your_token_here" \
   -H "Content-Type: application/json" \
   -d "{\"text\": \"The Eiffel Tower was completed in 1889 and is one of the most iconic landmarks in Paris.\"}"
+```
 
+```bash
 # Bullet Points
 curl -X POST http://127.0.0.1:8000/api/generate-bullet-points/ \
   -H "Authorization: Token your_token_here" \
   -H "Content-Type: application/json" \
   -d "{\"text\": \"Python is widely used in data science, machine learning, and web development.\"}"
+```
 
+```bash
 # Quiz
 curl -X POST http://127.0.0.1:8000/api/quiz/ \
   -H "Authorization: Token your_token_here" \
   -H "Content-Type: application/json"
-
 ```
 ---
 
