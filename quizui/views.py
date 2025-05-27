@@ -1,8 +1,8 @@
-from django.shortcuts import render
-from django.contrib.auth.decorators import login_required
 import json
 import requests
-from django.conf import settings
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render
+from rest_framework.authtoken.models import Token
 
 API_URL = "http://127.0.0.1:8000/api/quiz/"
 
@@ -20,23 +20,33 @@ def play_quiz(request):
 
         user_answers = [request.POST.get(f"q{i}") for i in range(len(questions))]
         score = sum(1 for i, q in enumerate(questions) if q["answer"] == user_answers[i])
+
         return render(request, "quizui/result.html", {
             "score": score,
             "total": len(questions),
             "questions": zip(questions, user_answers)
         })
 
-    # GET: fetch quiz from backend API
-    token = request.user.auth_token.key
+    # GET request: fetch quiz from backend API
+    token, _ = Token.objects.get_or_create(user=request.user)
+
     response = requests.post(API_URL, headers={
-        "Authorization": f"Token {token}",
+        "Authorization": f"Token {token.key}",
         "Content-Type": "application/json"
     })
-    data = response.json()
-    questions = data["quiz"]
+
+    try:
+        data = response.json()
+        questions = data["quiz"]
+        title = data.get("title", "Untitled Quiz")
+    except (ValueError, KeyError) as e:
+        return render(request, "quizui/error.html", {
+            "error": f"Quiz could not be loaded: {e}",
+            "raw": response.text
+        })
 
     return render(request, "quizui/quiz.html", {
-        "title": data["title"],
+        "title": title,
         "questions": questions,
         "json_questions": json.dumps(questions)
     })

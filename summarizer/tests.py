@@ -40,7 +40,7 @@ class SummaryAPITestCase(APITestCase):
                                     format='json',
                                     **self.auth_headers)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertIn('error', response.data)
+        self.assertIn('text', response.data)
 
     def test_summary_empty_text(self):
         response = self.client.post('/api/generate-summary/',
@@ -48,7 +48,7 @@ class SummaryAPITestCase(APITestCase):
                                     format='json',
                                     **self.auth_headers)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertIn('error', response.data)
+        self.assertIn('text', response.data)
 
     def test_bullet_points_missing_text(self):
         response = self.client.post('/api/generate-bullet-points/',
@@ -56,7 +56,7 @@ class SummaryAPITestCase(APITestCase):
                                     format='json',
                                     **self.auth_headers)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertIn('error', response.data)
+        self.assertIn('text', response.data)
 
     def test_bullet_points_empty_text(self):
         response = self.client.post('/api/generate-bullet-points/',
@@ -64,7 +64,7 @@ class SummaryAPITestCase(APITestCase):
                                     format='json',
                                     **self.auth_headers)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertIn('error', response.data)
+        self.assertIn('text', response.data)
 
     def test_invalid_token(self):
         headers = {

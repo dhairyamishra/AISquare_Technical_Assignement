@@ -1,0 +1,49 @@
+test_auth_required (summarizer.tests.SummaryAPITestCase.test_auth_required) ... ok
+test_bullet_points_empty_text (summarizer.tests.SummaryAPITestCase.test_bullet_points_empty_text) ... FAIL
+test_bullet_points_missing_text (summarizer.tests.SummaryAPITestCase.test_bullet_points_missing_text) ... FAIL
+test_generate_bullet_points_valid (summarizer.tests.SummaryAPITestCase.test_generate_bullet_points_valid) ... ok
+test_generate_summary_valid (summarizer.tests.SummaryAPITestCase.test_generate_summary_valid) ... ok
+test_invalid_token (summarizer.tests.SummaryAPITestCase.test_invalid_token) ... ok
+test_summary_empty_text (summarizer.tests.SummaryAPITestCase.test_summary_empty_text) ... FAIL
+test_summary_missing_text (summarizer.tests.SummaryAPITestCase.test_summary_missing_text) ... FAIL
+
+======================================================================
+FAIL: test_bullet_points_empty_text (summarizer.tests.SummaryAPITestCase.test_bullet_points_empty_text)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\--DPM-MAIN-DIR--\--CODING--\FINAL_AISQUARE_SUBMISSION\AISquare_Technical_Assignement\summarizer\tests.py", line 67, in test_bullet_points_empty_text
+    self.assertIn('error', response.data)
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'error' not found in {'text': [ErrorDetail(string='This field may not be blank.', code='blank')]}
+
+======================================================================
+FAIL: test_bullet_points_missing_text (summarizer.tests.SummaryAPITestCase.test_bullet_points_missing_text)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\--DPM-MAIN-DIR--\--CODING--\FINAL_AISQUARE_SUBMISSION\AISquare_Technical_Assignement\summarizer\tests.py", line 59, in test_bullet_points_missing_text
+    self.assertIn('error', response.data)
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'error' not found in {'text': [ErrorDetail(string='This field is required.', code='required')]}
+
+======================================================================
+FAIL: test_summary_empty_text (summarizer.tests.SummaryAPITestCase.test_summary_empty_text)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\--DPM-MAIN-DIR--\--CODING--\FINAL_AISQUARE_SUBMISSION\AISquare_Technical_Assignement\summarizer\tests.py", line 51, in test_summary_empty_text
+    self.assertIn('error', response.data)
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'error' not found in {'text': [ErrorDetail(string='This field may not be blank.', code='blank')]}
+
+======================================================================
+FAIL: test_summary_missing_text (summarizer.tests.SummaryAPITestCase.test_summary_missing_text)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\--DPM-MAIN-DIR--\--CODING--\FINAL_AISQUARE_SUBMISSION\AISquare_Technical_Assignement\summarizer\tests.py", line 43, in test_summary_missing_text
+    self.assertIn('error', response.data)
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'error' not found in {'text': [ErrorDetail(string='This field is required.', code='required')]}
+
+----------------------------------------------------------------------
+Ran 8 tests in 2.805s
+
+FAILED (failures=4)

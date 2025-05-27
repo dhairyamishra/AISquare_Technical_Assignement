@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>🧠 Welcome to the LLM Summary & Quiz Generator</h1>
+<p>This app lets you summarize text, generate bullet points, and play quizzes generated from Wikipedia using AI.</p>
+
+{% if user.is_authenticated %}
+  <p>Logged in as <strong>{{ user.username }}</strong></p>
+  <p><a href="{% url 'play-quiz' %}">▶️ Play a Quiz</a></p>
+
+  <form action="{% url 'logout' %}" method="post" style="display: inline;">
+    {% csrf_token %}
+    <button type="submit" style="background: none; border: none; padding: 0; color: blue; text-decoration: underline; cursor: pointer;">
+      Logout
+    </button>
+  </form>
+{% else %}
+  <a href="{% url 'login' %}">🔐 Login</a> or <a href="{% url 'register' %}">Register</a> to get started.
+{% endif %}
+<p><a href="{% url 'home' %}">🏠 Back to Home</a></p>
+{% endblock %}

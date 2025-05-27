@@ -10,6 +10,7 @@ from wikipedia import page, random
 from rest_framework.permissions import IsAuthenticated
 from .utils import client, MODEL_NAME
 import json
+from rest_framework.authtoken.models import Token
 
 class RegisterUserView(APIView):
     permission_classes = [AllowAny]
@@ -26,6 +27,18 @@ class RegisterUserView(APIView):
 
         User.objects.create_user(username=username, password=password)
         return Response({"message": "User created successfully"}, status=status.HTTP_201_CREATED)
+
+class LogoutUserView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        try:
+            # Delete the token to effectively "log out"
+            token = Token.objects.get(user=request.user)
+            token.delete()
+            return Response({"message": "Logged out successfully."}, status=status.HTTP_200_OK)
+        except Token.DoesNotExist:
+            return Response({"error": "Token not found."}, status=status.HTTP_400_BAD_REQUEST)
 
 class GenerateSummaryView(APIView):
     permission_classes = [IsAuthenticated]

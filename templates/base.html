@@ -10,6 +10,8 @@
       <p><a href="/admin/login/">Login</a></p>
     {% endif %}
     <hr>
-    {% block content %}{% endblock %}
+    {% block content %}
+    <p><a href="{% url 'home' %}">🏠 Back to Home</a></p>
+    {% endblock %}
 </body>
 </html>

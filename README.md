@@ -44,15 +44,15 @@ A Django REST Framework API powered by **OpenAI’s GPT-3.5** or **Groq’s LLaM
 1. **Clone the repo**
 
    ```bash
-   git clone https://github.com/yourusername/llm-summary-api.git
-   cd llm-summary-api
+   git clone https://github.com/dhairyamishra/AISquare_Technical_Assignement.git
+   cd AISquare_Technical_Assignement
    ```
 
 2. **Create & activate a virtual environment**
 
    ```bash
    python -m venv venv
-   .venv\Scripts\activate
+   .\.venv\Scripts\Activate.ps1
    ```
 
 3. **Install dependencies**
