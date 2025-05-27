@@ -92,13 +92,13 @@ All API endpoints require a valid **Token** header.
 1. **Register**
 
    ```bash
-   curl -X POST http://127.0.0.1:8000/api/register/         -H "Content-Type: application/json"         -d "{\"username\": \"demo\", \"password\": \"password123\"}"
+   curl -X POST http://127.0.0.1:8000/api/register/ -H "Content-Type: application/json" -d "{\"username\": \"demo\", \"password\": \"password123\"}"
    ```
 
 2. **Obtain a token**
 
    ```bash
-   curl -X POST http://127.0.0.1:8000/api/token-auth/         -H "Content-Type: application/json"         -d "{\"username\": \"demo\", \"password\": \"password123\"}"
+   curl -X POST http://127.0.0.1:8000/api/token-auth/ -H "Content-Type: application/json" -d "{\"username\": \"demo\", \"password\": \"password123\"}"
    ```
 
    Use the returned token in subsequent requests:
