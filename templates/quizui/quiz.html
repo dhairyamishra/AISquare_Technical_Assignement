@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>🧠 Quiz on "{{ title }}"</h2>
+<form method="post">
+  {% csrf_token %}
+  <input type="hidden" name="questions" value="{{ json_questions|escape }}" />
+  {% for q in questions %}
+    <p><strong>Q{{ forloop.counter }}:</strong> {{ q.question }}</p>
+    {% for opt in q.options %}
+      <label>
+        <input type="radio" name="q{{ forloop.parentloop.counter0 }}" value="{{ opt }}" required>
+        {{ opt }}
+      </label><br>
+    {% endfor %}
+    <hr>
+  {% endfor %}
+  <button type="submit">Submit Quiz</button>
+</form>
+{% endblock %}

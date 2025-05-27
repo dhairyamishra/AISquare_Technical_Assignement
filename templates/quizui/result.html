@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>✅ Quiz Completed!</h2>
+<p>You scored <strong>{{ score }}/{{ total }}</strong></p>
+
+<hr>
+<ol>
+{% for q, user_answer in questions %}
+  <li>
+    <p><strong>{{ q.question }}</strong></p>
+    <ul>
+      {% for option in q.options %}
+        <li>
+          {% if option == q.answer %}
+            ✅ <strong>{{ option }}</strong> (correct)
+          {% elif option == user_answer %}
+            ❌ <em>{{ option }}</em> (your answer)
+          {% else %}
+            {{ option }}
+          {% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+  </li>
+{% endfor %}
+</ol>
+
+<a href="{% url 'play-quiz' %}">🔄 Try another quiz</a>
+{% endblock %}

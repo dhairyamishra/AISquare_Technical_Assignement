@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>LLM Quiz Game</title>
+</head>
+<body>
+    {% if user.is_authenticated %}
+      <p>Logged in as {{ user.username }}</p>
+    {% else %}
+      <p><a href="/admin/login/">Login</a></p>
+    {% endif %}
+    <hr>
+    {% block content %}{% endblock %}
+</body>
+</html>
