@@ -4,8 +4,10 @@ A Django REST Framework API powered by **OpenAI’s GPT-3.5** or **Groq’s LLaM
 
 - Generate **summaries** and **bullet points** from raw text  
 - Create **AI-generated 5-question multiple-choice quizzes** from random Wikipedia articles  
+- Provide **HTML UI** for both summarization and bullet extraction tasks  
 - Let users **play those quizzes** in a clean web UI with auto-scoring  
 - Demonstrate everything end-to-end via an automated **CLI script using `curl`**  
+- Sanitize and process all input text to avoid API failures on special characters  
 - Store all outputs as structured **Markdown (`.md`) files**
 
 ---
@@ -16,9 +18,10 @@ A Django REST Framework API powered by **OpenAI’s GPT-3.5** or **Groq’s LLaM
 | -------- | ------- |
 | 🔐 Auth & Users | Token-based authentication and registration |
 | 🧠 LLM Tasks | Text summarization • Bullet extraction • Quiz generation |
-| 🎮 Frontend | Django template–based quiz UI with scoring and error handling |
+| 🧼 Input Safety | Hidden or special characters removed from input |
+| 🎮 Frontend | Django template–based UI for quizzes, summaries, and bullets |
 | 🪄 Automation | CLI script: Wikipedia → API calls → Markdown |
-| 🧪 Quality | Unit-test suite with timestamped reports |
+| 🧪 Quality | Unit-test suite with token, form, and API coverage |
 | 🔄 Fallback | Seamless switch between OpenAI and Groq keys defined in `.env` |
 | 📂 Persistence | All requests & results stored in the database and/or `.md` files |
 
@@ -31,14 +34,13 @@ A Django REST Framework API powered by **OpenAI’s GPT-3.5** or **Groq’s LLaM
 - **OpenAI** & **Groq** LLM APIs
 - `wikipedia` Python module (random article fetch)
 - `python-dotenv` for configuration
-- **HTML templates** (Django) for the quiz UI
+- **HTML templates** (Django) for the quiz/summarizer UI
 - `curl` for the demo script
 
 ---
 
 ## ⚙️ Setup Instructions
 
-> Commands below show **Windows-style paths**.  
 > On macOS/Linux, replace `.venv\Scripts\activate` with `source venv/bin/activate`.
 
 1. **Clone the repo**
@@ -51,7 +53,7 @@ A Django REST Framework API powered by **OpenAI’s GPT-3.5** or **Groq’s LLaM
 2. **Create & activate a virtual environment**
 
    ```bash
-   python -m venv venv
+   python -m venv .venv
    .\.venv\Scripts\Activate.ps1
    ```
 
@@ -89,7 +91,7 @@ A Django REST Framework API powered by **OpenAI’s GPT-3.5** or **Groq’s LLaM
 
 All API endpoints require a valid **Token** header.
 
-1. **Register**
+1. **Register via API**
 
    ```bash
    curl -X POST http://127.0.0.1:8000/api/register/ -H "Content-Type: application/json" -d "{\"username\": \"demo\", \"password\": \"password123\"}"
@@ -103,18 +105,15 @@ All API endpoints require a valid **Token** header.
 
    Use the returned token in subsequent requests:
 
-   ```
+   ```text
    Authorization: Token your_token_here
    ```
 
----
+3. **Logout (API)**
 
-## 💡 LLM Client Behavior
-
-- Defaults to **`gpt-3.5-turbo`** if `OPENAI_API_KEY` exists.  
-- Falls back to **`llama3-8b-8192`** via Groq when only `GROQ_API_KEY` is set.  
-- **Exclusively** reads keys from **`.env`** (no OS env-var reliance).  
-- Raises a clear error if neither key is provided.
+   ```bash
+   curl -X POST http://127.0.0.1:8000/api/logout/ -H "Authorization: Token your_token_here"
+   ```
 
 ---
 
@@ -124,32 +123,24 @@ All API endpoints require a valid **Token** header.
 |---------------|---------|
 | `POST /api/register/` | Create a new user |
 | `POST /api/token-auth/` | Obtain an auth token |
+| `POST /api/logout/` | Invalidate the user's token |
 | `POST /api/generate-summary/` | Single-sentence summary |
 | `POST /api/generate-bullet-points/` | Bullet-point extraction |
 | `POST /api/quiz/` | Generate a 5-question MCQ quiz from a random Wikipedia article |
 
-### Examples
-
-```bash
-# Summary
-curl -X POST http://127.0.0.1:8000/api/generate-summary/ -H "Authorization: Token your_token_here" -H "Content-Type: application/json" -d "{\"text\": \"The Eiffel Tower was completed in 1889 and is one of the most iconic landmarks in Paris.\"}"
-
-# Bullets
-curl -X POST http://127.0.0.1:8000/api/generate-bullet-points/ -H "Authorization: Token your_token_here" -H "Content-Type: application/json" -d "{\"text\": \"Python is widely used in data science, machine learning, and web development.\"}"
-
-# Quiz
-curl -X POST http://127.0.0.1:8000/api/quiz/ -H "Authorization: Token your_token_here" -H "Content-Type: application/json"
-```
-
 ---
 
-## 🖥️ Web UI (Quiz Player)
+## 🖥️ Web UI Endpoints
 
-Visit **`http://127.0.0.1:8000/quiz/play/`** (login required).
-
-- Fetches a quiz from a random Wikipedia article
-- Lets you choose answers and shows your score instantly
-- Displays friendly error messages if quiz creation fails
+| URL | View |
+|-----|------|
+| `/` | Home page |
+| `/accounts/login/` | Login form |
+| `/accounts/register/` | Register form |
+| `/accounts/logout/` | Secure logout |
+| `/quiz/play/` | AI-generated quiz interface |
+| `/summarizer/ui/summary/` | Summary form UI |
+| `/summarizer/ui/bullets/` | Bullet-point form UI |
 
 ---
 
@@ -157,9 +148,10 @@ Visit **`http://127.0.0.1:8000/quiz/play/`** (login required).
 
 ```bash
 python manage.py test summarizer --testrunner=summarizer.tests.ReportRunner
+python manage.py test quizui
 ```
 
-Reports are saved as:
+Reports from `ReportRunner` are saved as:
 
 ```
 test_report_YYYYMMDD_HHMM.txt
@@ -167,54 +159,7 @@ test_report_YYYYMMDD_HHMM.txt
 
 ---
 
-## 💻 CLI Demo: Wikipedia → LLM → Markdown
-
-```bash
-python demo_curl_runner.py
-```
-
-The script will:
-
-1. Register & authenticate a user  
-2. Pull a random Wikipedia article  
-3. Call summary **and** bullet-point endpoints via `curl`  
-4. Save output as `summary_<topic>.md`
-
----
-
-## 🗂️ Project Structure
-
-```
-llm_summary_api/
-├── summarizer/
-│   ├── admin.py
-│   ├── apps.py
-│   ├── models.py
-│   ├── serializers.py
-│   ├── tests.py
-│   ├── urls.py
-│   ├── utils.py
-│   └── views.py
-├── quizui/
-│   ├── views.py
-│   ├── urls.py
-├── templates/
-│   ├── base.html
-│   ├── registration/
-│   │   └── login.html
-│   └── quizui/
-│       ├── quiz.html
-│       ├── result.html
-│       └── error.html
-├── demo_curl_runner.py
-├── manage.py
-├── .env
-├── requirements.txt
-└── README.md
-```
-
----
-
 ## 📄 License
 
-MIT License
+MIT License  
+© 2025 dhairyamishra
