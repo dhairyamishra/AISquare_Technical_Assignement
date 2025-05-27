@@ -1,167 +1,169 @@
 # 🧠 LLM Summary & Bullet Point Generator API
 
-A Django REST API that uses OpenAI to generate intelligent summaries and bullet points from any input text. Built as part of the AISquare Backend Developer assignment.
+A Django REST Framework API that generates summaries and bullet points using OpenAI's GPT-3.5 or Groq's LLaMA 3 models. Built for the AISquare Backend Developer assignment.
 
 ## 🚀 Features
 
-- 🔐 Token-based authentication
-- 📝 Summarize long passages using GPT-3.5
-- 📌 Extract bullet points from dense text
-- 💾 Store all entries in a database
-- ✅ Unit tested with Django's test framework
-- 📄 `.env` support for secure API key handling
+- Token-based authentication
+- Supports OpenAI and Groq AI clients
+- Automatic fallback from OpenAI → Groq
+- Summarization and bullet point generation using LLMs
+- RESTful endpoints with persistent storage
+- Fully tested with timestamped test reports
 
 ## 📦 Tech Stack
 
 - Python 3.10+
 - Django 5.x
 - Django REST Framework
-- OpenAI API (GPT-3.5)
-- Token Authentication
-- `python-dotenv` for secure key management
+- OpenAI / Groq LLM APIs
+- `python-dotenv` for secure `.env` config
 
 ## ⚙️ Setup Instructions
 
 1. **Clone the repository**
-   ```bash
-   git clone https://github.com/yourusername/llm-summary-api.git
-   cd llm-summary-api
-   ```
+
+```bash
+git clone https://github.com/yourusername/llm-summary-api.git
+cd llm-summary-api
+```
 
 2. **Create a virtual environment**
-   ```bash
-   python -m venv venv
-   .\venv\Scripts\activate
-   ```
+
+```bash
+python -m venv venv
+.\venv\Scripts\activate
+```
 
 3. **Install dependencies**
-   ```bash
-   pip install -r requirements.txt
-   ```
+
+```bash
+pip install -r requirements.txt
+```
 
 4. **Create a `.env` file**
-   ```
-   OPENAI_API_KEY=your_openai_key_here
-   DEBUG=True
-   ```
+
+```
+# Use either or both. OpenAI is preferred if both are present.
+
+OPENAI_API_KEY=sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxx
+GROQ_API_KEY=groq-xxxxxxxxxxxxxxxxxxxxxxxxxxxx
+DEBUG=True
+```
 
 5. **Apply migrations and create a superuser**
-   ```bash
-   python manage.py migrate
-   python manage.py createsuperuser
-   ```
 
-6. **Run the development server**
-   ```bash
-   python manage.py runserver
-   ```
+```bash
+python manage.py migrate
+python manage.py createsuperuser
+```
+
+6. **Run the server**
+
+```bash
+python manage.py runserver
+```
 
 ## 🔐 Authentication
 
 All endpoints require token-based authentication.
 
-To obtain a token:
+### Get token:
 ```bash
-POST /api/token-auth/
-{
-  "username": "yourusername",
-  "password": "yourpassword"
-}
-```
-```
 curl -X POST http://127.0.0.1:8000/api/token-auth/ \
-     -H "Content-Type: application/json" \
-     -d '{"username": "your_username", "password": "your_password"}'
+  -H "Content-Type: application/json" \
+  -d "{\"username\": \"your_username\", \"password\": \"your_password\"}"
 
 ```
 
-Use the returned token in the `Authorization` header for all requests:
+### Use in headers:
 ```
 Authorization: Token your_token_here
 ```
+
+## 💡 How the LLM Client Works
+
+The backend will:
+
+- Use `gpt-3.5-turbo` if `OPENAI_API_KEY` is present
+- Otherwise fall back to `llama3-8b-8192` via Groq if `GROQ_API_KEY` is available
+- Raise an error if neither key is present
+
+No system environment variables are used — only values from `.env`.
 
 ## 📡 API Endpoints
 
 ### `POST /api/generate-summary/`
 
-- Input:
-  ```json
-  {
-    "text": "The quick brown fox jumps over the lazy dog."
-  }
-  ```
-
-  ```
-  curl -X POST http://127.0.0.1:8000/api/generate-summary/ -H "Authorization: Token your_token_here" -H "Content-Type: application/json" -d "{\"text\": \"The Eiffel Tower was built in 1889 and is one of the most iconic landmarks in the world.\"}"
-  ```
+```
+curl -X POST http://127.0.0.1:8000/api/generate-summary/ \
+  -H "Authorization: Token your_token_here" \
+  -H "Content-Type: application/json" \
+  -d "{\"text\": \"The Eiffel Tower was built in 1889 and is one of the most iconic landmarks in the world.\"}"
 
 
+Response:
+{
+  "summary": "The Eiffel Tower, built in 1889, is a globally recognized landmark."
+}
+```
 
-- Response:
-  ```json
-  {
-    "summary": "A quick brown fox leaps over a lazy dog."
-  }
-  ```
-
-  ```
-  curl -X POST http://127.0.0.1:8000/api/generate-bullet-points/ -H "Authorization: Token your_token_here" -H "Content-Type: application/json" -d "{\"text\": \"Python is widely used in data science, machine learning, and web development.\"}"
-
-  ```
+---
 
 ### `POST /api/generate-bullet-points/`
 
-- Input:
-  ```json
-  {
-    "text": "Python is a versatile language. It is used in data science, AI, and web development."
-  }
-  ```
+```
+curl -X POST http://127.0.0.1:8000/api/generate-bullet-points/ \
+  -H "Authorization: Token your_token_here" \
+  -H "Content-Type: application/json" \
+  -d "{\"text\": \"Python is widely used in data science, machine learning, and web development.\"}"
 
-- Response:
-  ```json
-  {
-    "bullet_points": [
-      "Python is a versatile language.",
-      "Used in data science, AI, and web development."
-    ]
-  }
-  ```
+
+Response:
+{
+  "bullet_points": [
+    "Python is widely used in data science.",
+    "It is used in machine learning.",
+    "Also popular for web development."
+  ]
+}
+```
 
 ## 🧪 Running Tests
 
-To run the full test suite and save the results:
+To run all unit tests and save a timestamped report:
 
 ```bash
 python manage.py test summarizer --testrunner=summarizer.tests.ReportRunner
 ```
 
-This will generate a `test_report.txt` file with all test results.
+Generates: `test_report_YYYYMMDD_HHMM.txt`
 
 ## 🗂️ Project Structure
 
 ```
 llm_summary_api/
 ├── summarizer/
+│   ├── admin.py
+│   ├── apps.py
 │   ├── models.py
-│   ├── views.py
 │   ├── serializers.py
+│   ├── tests.py
+│   ├── urls.py
 │   ├── utils.py
-│   └── tests.py
+│   └── views.py
 ├── llm_summary_api/
 │   └── settings.py, urls.py
-├── manage.py
 ├── .env
+├── manage.py
 ├── requirements.txt
 └── README.md
 ```
 
-## 🧠 Example `.env`
+## 👨‍💻 Author
 
-```
-OPENAI_API_KEY=sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-DEBUG=True
-```
+Developed by Your Name  
+https://github.com/yourusername
 
 ## 📄 License
 

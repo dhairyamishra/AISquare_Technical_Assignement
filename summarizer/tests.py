@@ -1,5 +1,6 @@
 import json
 import unittest
+from datetime import datetime
 from rest_framework.test import APITestCase
 from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import User
@@ -83,10 +84,13 @@ class SummaryAPITestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
 
-# Custom runner to save results to a text file
+# Custom runner to save results to a timestamped text file
 class ReportRunner(DiscoverRunner):
     def run_suite(self, suite, **kwargs):
-        with open("test_report.txt", "w", encoding="utf-8") as f:
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M")
+        report_filename = f"test_report_{timestamp}.txt"
+        with open(report_filename, "w", encoding="utf-8") as f:
             runner = unittest.TextTestRunner(stream=f, verbosity=2)
             result = runner.run(suite)
+        print(f"✅ Test results saved to {report_filename}")
         return result

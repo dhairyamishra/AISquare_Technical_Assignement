@@ -1,0 +1,169 @@
+test_auth_required (summarizer.tests.SummaryAPITestCase.test_auth_required) ... ok
+test_bullet_points_empty_text (summarizer.tests.SummaryAPITestCase.test_bullet_points_empty_text) ... ok
+test_bullet_points_missing_text (summarizer.tests.SummaryAPITestCase.test_bullet_points_missing_text) ... ok
+test_generate_bullet_points_valid (summarizer.tests.SummaryAPITestCase.test_generate_bullet_points_valid) ... ERROR
+test_generate_summary_valid (summarizer.tests.SummaryAPITestCase.test_generate_summary_valid) ... ERROR
+test_invalid_token (summarizer.tests.SummaryAPITestCase.test_invalid_token) ... ok
+test_summary_empty_text (summarizer.tests.SummaryAPITestCase.test_summary_empty_text) ... ok
+test_summary_missing_text (summarizer.tests.SummaryAPITestCase.test_summary_missing_text) ... ok
+
+======================================================================
+ERROR: test_generate_bullet_points_valid (summarizer.tests.SummaryAPITestCase.test_generate_bullet_points_valid)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\--DPM-MAIN-DIR--\--CODING--\AISquare_Technical_Assignement\summarizer\tests.py", line 29, in test_generate_bullet_points_valid
+    response = self.client.post('/api/generate-bullet-points/',
+                                {'text': self.sample_text},
+                                format='json',
+                                **self.auth_headers)
+  File "C:\--DPM-MAIN-DIR--\--CODING--\AISquare_Technical_Assignement\venv\Lib\site-packages\rest_framework\test.py", line 299, in post
+    response = super().post(
+        path, data=data, format=format, content_type=content_type, **extra)
+  File "C:\--DPM-MAIN-DIR--\--CODING--\AISquare_Technical_Assignement\venv\Lib\site-packages\rest_framework\test.py", line 213, in post
+    return self.generic('POST', path, data, content_type, **extra)
+           ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\--DPM-MAIN-DIR--\--CODING--\AISquare_Technical_Assignement\venv\Lib\site-packages\rest_framework\test.py", line 237, in generic
+    return super().generic(
+           ~~~~~~~~~~~~~~~^
+        method, path, data, content_type, secure, **extra)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\--DPM-MAIN-DIR--\--CODING--\AISquare_Technical_Assignement\venv\Lib\site-packages\django\test\client.py", line 671, in generic
+    return self.request(**r)
+           ~~~~~~~~~~~~^^^^^
+  File "C:\--DPM-MAIN-DIR--\--CODING--\AISquare_Technical_Assignement\venv\Lib\site-packages\rest_framework\test.py", line 289, in request
+    return super().request(**kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\--DPM-MAIN-DIR--\--CODING--\AISquare_Technical_Assignement\venv\Lib\site-packages\rest_framework\test.py", line 241, in request
+    request = super().request(**kwargs)
+  File "C:\--DPM-MAIN-DIR--\--CODING--\AISquare_Technical_Assignement\venv\Lib\site-packages\django\test\client.py", line 1087, in request
+    self.check_exception(response)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\--DPM-MAIN-DIR--\--CODING--\AISquare_Technical_Assignement\venv\Lib\site-packages\django\test\client.py", line 802, in check_exception
+    raise exc_value
+  File "C:\--DPM-MAIN-DIR--\--CODING--\AISquare_Technical_Assignement\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\--DPM-MAIN-DIR--\--CODING--\AISquare_Technical_Assignement\venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\--DPM-MAIN-DIR--\--CODING--\AISquare_Technical_Assignement\venv\Lib\site-packages\django\views\decorators\csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\--DPM-MAIN-DIR--\--CODING--\AISquare_Technical_Assignement\venv\Lib\site-packages\django\views\generic\base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\--DPM-MAIN-DIR--\--CODING--\AISquare_Technical_Assignement\venv\Lib\site-packages\rest_framework\views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\--DPM-MAIN-DIR--\--CODING--\AISquare_Technical_Assignement\venv\Lib\site-packages\rest_framework\views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "C:\--DPM-MAIN-DIR--\--CODING--\AISquare_Technical_Assignement\venv\Lib\site-packages\rest_framework\views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "C:\--DPM-MAIN-DIR--\--CODING--\AISquare_Technical_Assignement\venv\Lib\site-packages\rest_framework\views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "C:\--DPM-MAIN-DIR--\--CODING--\AISquare_Technical_Assignement\summarizer\views.py", line 30, in post
+    bullet_points = generate_bullet_points(text)
+  File "C:\--DPM-MAIN-DIR--\--CODING--\AISquare_Technical_Assignement\summarizer\utils.py", line 34, in generate_bullet_points
+    response = client.chat.completions.create(
+        model="gpt-3.5-turbo",
+    ...<3 lines>...
+        ]
+    )
+  File "C:\--DPM-MAIN-DIR--\--CODING--\AISquare_Technical_Assignement\venv\Lib\site-packages\openai\_utils\_utils.py", line 287, in wrapper
+    return func(*args, **kwargs)
+  File "C:\--DPM-MAIN-DIR--\--CODING--\AISquare_Technical_Assignement\venv\Lib\site-packages\openai\resources\chat\completions\completions.py", line 925, in create
+    return self._post(
+           ~~~~~~~~~~^
+        "/chat/completions",
+        ^^^^^^^^^^^^^^^^^^^^
+    ...<43 lines>...
+        stream_cls=Stream[ChatCompletionChunk],
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\--DPM-MAIN-DIR--\--CODING--\AISquare_Technical_Assignement\venv\Lib\site-packages\openai\_base_client.py", line 1239, in post
+    return cast(ResponseT, self.request(cast_to, opts, stream=stream, stream_cls=stream_cls))
+                           ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\--DPM-MAIN-DIR--\--CODING--\AISquare_Technical_Assignement\venv\Lib\site-packages\openai\_base_client.py", line 1034, in request
+    raise self._make_status_error_from_response(err.response) from None
+openai.NotFoundError: Error code: 404 - {'error': {'message': 'The model `gpt-3.5-turbo` does not exist or you do not have access to it.', 'type': 'invalid_request_error', 'code': 'model_not_found'}}
+
+======================================================================
+ERROR: test_generate_summary_valid (summarizer.tests.SummaryAPITestCase.test_generate_summary_valid)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\--DPM-MAIN-DIR--\--CODING--\AISquare_Technical_Assignement\summarizer\tests.py", line 21, in test_generate_summary_valid
+    response = self.client.post('/api/generate-summary/',
+                                {'text': self.sample_text},
+                                format='json',
+                                **self.auth_headers)
+  File "C:\--DPM-MAIN-DIR--\--CODING--\AISquare_Technical_Assignement\venv\Lib\site-packages\rest_framework\test.py", line 299, in post
+    response = super().post(
+        path, data=data, format=format, content_type=content_type, **extra)
+  File "C:\--DPM-MAIN-DIR--\--CODING--\AISquare_Technical_Assignement\venv\Lib\site-packages\rest_framework\test.py", line 213, in post
+    return self.generic('POST', path, data, content_type, **extra)
+           ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\--DPM-MAIN-DIR--\--CODING--\AISquare_Technical_Assignement\venv\Lib\site-packages\rest_framework\test.py", line 237, in generic
+    return super().generic(
+           ~~~~~~~~~~~~~~~^
+        method, path, data, content_type, secure, **extra)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\--DPM-MAIN-DIR--\--CODING--\AISquare_Technical_Assignement\venv\Lib\site-packages\django\test\client.py", line 671, in generic
+    return self.request(**r)
+           ~~~~~~~~~~~~^^^^^
+  File "C:\--DPM-MAIN-DIR--\--CODING--\AISquare_Technical_Assignement\venv\Lib\site-packages\rest_framework\test.py", line 289, in request
+    return super().request(**kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\--DPM-MAIN-DIR--\--CODING--\AISquare_Technical_Assignement\venv\Lib\site-packages\rest_framework\test.py", line 241, in request
+    request = super().request(**kwargs)
+  File "C:\--DPM-MAIN-DIR--\--CODING--\AISquare_Technical_Assignement\venv\Lib\site-packages\django\test\client.py", line 1087, in request
+    self.check_exception(response)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\--DPM-MAIN-DIR--\--CODING--\AISquare_Technical_Assignement\venv\Lib\site-packages\django\test\client.py", line 802, in check_exception
+    raise exc_value
+  File "C:\--DPM-MAIN-DIR--\--CODING--\AISquare_Technical_Assignement\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\--DPM-MAIN-DIR--\--CODING--\AISquare_Technical_Assignement\venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\--DPM-MAIN-DIR--\--CODING--\AISquare_Technical_Assignement\venv\Lib\site-packages\django\views\decorators\csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\--DPM-MAIN-DIR--\--CODING--\AISquare_Technical_Assignement\venv\Lib\site-packages\django\views\generic\base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\--DPM-MAIN-DIR--\--CODING--\AISquare_Technical_Assignement\venv\Lib\site-packages\rest_framework\views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\--DPM-MAIN-DIR--\--CODING--\AISquare_Technical_Assignement\venv\Lib\site-packages\rest_framework\views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "C:\--DPM-MAIN-DIR--\--CODING--\AISquare_Technical_Assignement\venv\Lib\site-packages\rest_framework\views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "C:\--DPM-MAIN-DIR--\--CODING--\AISquare_Technical_Assignement\venv\Lib\site-packages\rest_framework\views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "C:\--DPM-MAIN-DIR--\--CODING--\AISquare_Technical_Assignement\summarizer\views.py", line 17, in post
+    summary = generate_summary(text)
+  File "C:\--DPM-MAIN-DIR--\--CODING--\AISquare_Technical_Assignement\summarizer\utils.py", line 24, in generate_summary
+    response = client.chat.completions.create(
+        model="gpt-3.5-turbo",
+    ...<3 lines>...
+        ]
+    )
+  File "C:\--DPM-MAIN-DIR--\--CODING--\AISquare_Technical_Assignement\venv\Lib\site-packages\openai\_utils\_utils.py", line 287, in wrapper
+    return func(*args, **kwargs)
+  File "C:\--DPM-MAIN-DIR--\--CODING--\AISquare_Technical_Assignement\venv\Lib\site-packages\openai\resources\chat\completions\completions.py", line 925, in create
+    return self._post(
+           ~~~~~~~~~~^
+        "/chat/completions",
+        ^^^^^^^^^^^^^^^^^^^^
+    ...<43 lines>...
+        stream_cls=Stream[ChatCompletionChunk],
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\--DPM-MAIN-DIR--\--CODING--\AISquare_Technical_Assignement\venv\Lib\site-packages\openai\_base_client.py", line 1239, in post
+    return cast(ResponseT, self.request(cast_to, opts, stream=stream, stream_cls=stream_cls))
+                           ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\--DPM-MAIN-DIR--\--CODING--\AISquare_Technical_Assignement\venv\Lib\site-packages\openai\_base_client.py", line 1034, in request
+    raise self._make_status_error_from_response(err.response) from None
+openai.NotFoundError: Error code: 404 - {'error': {'message': 'The model `gpt-3.5-turbo` does not exist or you do not have access to it.', 'type': 'invalid_request_error', 'code': 'model_not_found'}}
+
+----------------------------------------------------------------------
+Ran 8 tests in 2.688s
+
+FAILED (errors=2)
